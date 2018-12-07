@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Sunflower:300,500,700');
+
+body { 
+  font-family: 'Sunflower', sans-serif;
+  background-color: #fff;
+  font-size: 1rem;
+}
+
+.square {
+  border-radius: 8px;
+  box-shadow: 0 4px 14px 0 rgba(198,202,206,0.3);
+  background-color: #FFF;
+}
+
+.btn-green {
+  border-radius: 6px;
+  padding: .25rem .5rem;
+  display: block;
+  text-align: center;
+  font-weight: bold;
+  line-height: 1.41;
+  color: #FFF;
+  text-decoration: none;
+  max-width: max-content;
+  transition: all 150ms ease;
+  user-select: none;
+  z-index: 1;
+  background-color: #34c88a;
+  font-size: 14px;
+  border: none;
+  @media all and (min-width: 768px) {
+    padding: .75rem 1rem;
+    font-size: 1rem;
+  }
+  &:hover {
+    box-shadow: .5em .5em 10px 0px rgba(226, 226, 226, 0.58);
+    cursor: pointer;
+  }
+}
