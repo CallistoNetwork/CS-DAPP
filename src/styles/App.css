@@ -16,6 +16,9 @@
     justify-items: center; }
     .App .App-error .App-error-text {
       color: red; }
+  .App .App-address {
+    text-align: center;
+    word-break: break-all; }
   .App .App-container .App-container-logos {
     display: flex;
     justify-content: space-around; }

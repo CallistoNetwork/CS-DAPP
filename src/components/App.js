@@ -97,11 +97,15 @@ class App extends Component {
               </figure>
             </a>
           </div>
-          <div className="App-content">
-            You are connected to address: <br />
-            <strong>
-              {this.state.address}
-            </strong>
+          <div>
+            {this.state.address ? (
+              <div className="App-address">
+                You are connected to address: <br />
+                <strong>
+                  {this.state.address}
+                </strong>
+              </div>
+            ) : null}
           </div>
           <div className="App-content square">
             <AccountDetails
