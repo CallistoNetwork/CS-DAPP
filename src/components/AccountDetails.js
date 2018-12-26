@@ -7,22 +7,22 @@ class AccountDetails extends Component {
     stakeConfirmation: false,
   };
 
-  handleStake = (event) => {
+  handleStake = event => {
     event.preventDefault();
     this.props.openStakeConfirmation();
   }
 
-  submitStakeForm = (event) => {
+  submitStakeForm = event => {
     event.preventDefault();
     this.setState({ stakeConfirmation: true });
   }
 
-  handleWithdraw = (event) => {
+  handleWithdraw = event => {
     event.preventDefault();
     this.props.openWithdrawConfirmation();
   }
 
-  handleClaim = (event) => {
+  handleClaim = event => {
     event.preventDefault();
     this.props.openClaimConfirmation();
   }

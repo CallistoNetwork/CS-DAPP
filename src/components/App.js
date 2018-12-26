@@ -55,10 +55,10 @@ class App extends Component {
       try {
         await window.ethereum.enable();
         const $this = this;
-        window.web3.eth.getAccounts(function(error, accounts, _this = $this) {
+        window.web3.eth.getAccounts((error, accounts, _this = $this) => {
           if (!error) {
             $this.setState({ address: accounts[0] });
-            window.web3.eth.getBalance(accounts[0], function(error, balance, __this = _this) {
+            window.web3.eth.getBalance(accounts[0], (error, balance, __this = _this) => {
               if (!error && balance) {
                 __this.setState({
                   balance: balance.toNumber() / 1000000000000000000,
