@@ -6,14 +6,17 @@ import trustLogo from '../images/trustLogo.png';
 
 import '../styles/App.css';
 
-window.balance = 0;
-
 class App extends Component {
   
   state = {
     stakeConfirmation: false,
     withdrawConfirmation: false,
     claimConfirmation: false,
+    error: '',
+    address: '',
+    balance: 0,
+    onStaking: 0,
+    reward: 0,
   }
 
   componentDidMount() {
@@ -44,27 +47,37 @@ class App extends Component {
     this.setState({ claimConfirmation: false });
   }
 
+  setError = value => this.setState({ error: value });
+
   connectNode = async () => {
     if (window.ethereum) {
       window.web3 = new window.Web3(window.ethereum);
       try {
         await window.ethereum.enable();
-        window.web3.eth.getAccounts(function(error, accounts) {
+        const $this = this;
+        window.web3.eth.getAccounts(function(error, accounts, _this = $this) {
           if (!error) {
-            window.web3.eth.getBalance(accounts[0], function(error, balance) {
+            $this.setState({ address: accounts[0] });
+            window.web3.eth.getBalance(accounts[0], function(error, balance, __this = _this) {
               if (!error && balance) {
-                window.balance = balance.toNumber() / 1000000000000000000;
+                __this.setState({
+                  balance: balance.toNumber() / 1000000000000000000,
+                  onStaking: 200000,
+                  reward: 39000,
+                });
               } else {
-                console.error(error);
+                __this.setState({ error });
               }
             });
           } else {
-            console.error(error);
+            this.setError(error)
           }
         });
       } catch (error) {
-        console.log(error, 'Error: ')
+        this.setError(error)
       }
+    } else {
+      this.setError('Connection problems.');
     }
   }
 
@@ -84,11 +97,17 @@ class App extends Component {
               </figure>
             </a>
           </div>
+          <div className="App-content">
+            You are connected to address: <br />
+            <strong>
+              {this.state.address}
+            </strong>
+          </div>
           <div className="App-content square">
             <AccountDetails
-              balance={window.balance}
-              staked={2000000}
-              reward={0}
+              balance={this.state.balance}
+              staked={this.state.onStaking}
+              reward={this.state.reward}
               openStakeConfirmation={this.openStakeConfirmation}
               closeStakeConfirmation={this.closeStakeConfirmation}
               stakeConfirmation={this.state.stakeConfirmation}
@@ -98,8 +117,16 @@ class App extends Component {
               openClaimConfirmation={this.openClaimConfirmation}
               closeClaimConfirmation={this.closeClaimConfirmation}
               claimConfirmation={this.state.claimConfirmation}
+              address={this.state.address}
             />
-            <ProgressBar progress={62.1} />
+            <ProgressBar progress={22} />
+            {this.state.error ? (
+              <div className="App-error">
+                <span  className="App-error-text">
+                  {this.state.error}
+                </span>
+              </div>
+            ) : null}
           </div>
         </div>
       </div>

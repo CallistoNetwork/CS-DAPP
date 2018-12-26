@@ -8,6 +8,16 @@
     padding: 0;
     height: 100vh;
   }
+  .App-error {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-items: center;
+    .App-error-text {
+      color: red;
+    }
+  }
   .App-container {
     .App-container-logos {
       display: flex;

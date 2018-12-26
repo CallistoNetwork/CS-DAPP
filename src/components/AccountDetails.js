@@ -38,8 +38,8 @@ class AccountDetails extends Component {
         </div>
         <div className="App-content-details">
           <span className="App-content-head-title">{balance.toLocaleString()} CLO</span>
-          <span className="App-content-head-title">{staked.toLocaleString()}</span>
-          <span className="App-content-head-title">{reward.toLocaleString()}</span>
+          <span className="App-content-head-title">{staked.toLocaleString()} CLO</span>
+          <span className="App-content-head-title">{reward.toLocaleString()} CLO</span>
         </div>
         <div className="App-content-btns">
           <div><a className="btn-green" href="#stake" onClick={this.handleStake}>Start Staking</a></div>
@@ -63,7 +63,7 @@ class AccountDetails extends Component {
           <form className="App-stakeForm" onSubmit={this.submitStakeForm}>
             <h3 className="App-stakeForm-title">How much will your stake be?</h3>
             <p className="App-stakeForm-subtitle">
-              Lorem ipsun dolor sit amet
+              Your funds will be locked for 27 days and you will be unable to withdraw within the locking period
             </p>
             <input className="App-stakeForm-input" type='number' min={0} placeholder='Amount to stake' required />
             {!this.state.stakeConfirmation ? (
@@ -111,7 +111,7 @@ class AccountDetails extends Component {
           <div className="App-stakeForm">
             <h3 className="App-stakeForm-title">Do you wanna withdraw all your staked CLO's ?</h3>
             <p className="App-stakeForm-subtitle">
-              Lorem ipsun dolor sit amet
+              You will withdraw from the staking contract
             </p>
             <div className="App-stakeForm-confirmation-content">
               <a
@@ -146,7 +146,7 @@ class AccountDetails extends Component {
           <div className="App-stakeForm">
             <h3 className="App-stakeForm-title">Do you wanna claim your rewards?</h3>
             <p className="App-stakeForm-subtitle">
-              Lorem ipsun dolor sit amet
+              After claiming the reward, your funds will be frozen for the next 27 days and you will be unable to claim new reward OR withdraw your funds during this period.
             </p>
             <div className="App-stakeForm-confirmation-content">
               <a

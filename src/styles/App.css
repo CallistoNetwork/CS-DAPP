@@ -8,6 +8,14 @@
       padding-top: 0;
       padding: 0;
       height: 100vh; } }
+  .App .App-error {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-items: center; }
+    .App .App-error .App-error-text {
+      color: red; }
   .App .App-container .App-container-logos {
     display: flex;
     justify-content: space-around; }
