@@ -121,7 +121,6 @@ class App extends Component {
               openClaimConfirmation={this.openClaimConfirmation}
               closeClaimConfirmation={this.closeClaimConfirmation}
               claimConfirmation={this.state.claimConfirmation}
-              address={this.state.address}
             />
             <ProgressBar progress={22} />
             {this.state.error ? (
