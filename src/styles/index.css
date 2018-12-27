@@ -24,7 +24,8 @@ body {
   z-index: 1;
   background-color: #34c88a;
   font-size: 14px;
-  border: none; }
+  border: none;
+  -webkit-appearance: none; }
   @media all and (min-width: 768px) {
     .btn-green {
       padding: .75rem 1rem;
