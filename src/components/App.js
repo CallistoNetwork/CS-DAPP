@@ -160,7 +160,7 @@ class App extends Component {
               daysPassed={this.state.daysPassed}
               roundInterval={this.state.roundInterval}
             />
-            <ProgressBar progress={((this.state.daysPassed * 100) / this.state.roundInterval).toFixed(0)} />
+            <ProgressBar progress={((this.state.daysPassed * 100) / this.state.roundInterval).toFixed(0) || 0} />
             {this.state.error ? (
               <div className="App-error">
                 <span  className="App-error-text">
