@@ -3,6 +3,7 @@ import AccountDetails from './AccountDetails';
 import ProgressBar from './ProgressBar';
 import logo from '../images/single-logo.svg';
 import trustLogo from '../images/trustLogo.png';
+import abi from '../utils/csAbi';
 
 import '../styles/App.css';
 
@@ -17,6 +18,8 @@ class App extends Component {
     balance: 0,
     onStaking: 0,
     reward: 0,
+    roundInterval: 27,
+    daysLeft: 0,
   }
 
   componentDidMount() {
@@ -47,6 +50,12 @@ class App extends Component {
     this.setState({ claimConfirmation: false });
   }
 
+  daysPassed = (date1) => {
+    const date2 = new Date();
+    const timeDiff = Math.abs(date2.getTime() - date1.getTime());
+    return Math.floor(timeDiff / (1000 * 3600 * 24));
+  }
+
   setError = value => this.setState({ error: value });
 
   connectNode = async () => {
@@ -54,27 +63,54 @@ class App extends Component {
       window.web3 = new window.Web3(window.ethereum);
       try {
         await window.ethereum.enable();
+        const csContract = await window.web3.eth.contract(abi).at('0xd813419749b3c2cDc94A2F9Cfcf154113264a9d6');
         const $this = this;
         window.web3.eth.getAccounts((error, accounts, _this = $this) => {
+          $this.setState({ address: accounts[0] });
           if (!error) {
-            $this.setState({ address: accounts[0] });
+            csContract.round_interval((error, roundInterval) => {
+              if (!error) {
+                _this.setState({
+                  roundInterval: roundInterval / 86400,
+                });
+              } else {
+                console.log(error)
+              } 
+            });
+            csContract.staker(accounts[0], (error, staker) => {
+              if (!error) {
+                _this.setState({
+                  onStaking: window.web3.fromWei(staker[0]),
+                  daysLeft: _this.daysPassed(new Date(staker[1].toNumber() * 1000)),
+                });
+              } else {
+                console.log(error)
+              } 
+            });
+            csContract.stake_reward(accounts[0], (error, reward) => {
+              if (!error) {
+                _this.setState({
+                  reward: window.web3.fromWei(reward).toFixed(3),
+                })
+              } else {
+                console.log(error)
+              }
+            });
             window.web3.eth.getBalance(accounts[0], (error, balance, __this = _this) => {
               if (!error && balance) {
                 __this.setState({
-                  balance: balance.toNumber() / 1000000000000000000,
-                  onStaking: 200000,
-                  reward: 39000,
+                  balance: window.web3.fromWei(balance).toFixed(3),
                 });
               } else {
-                __this.setState({ error });
+                console.log(error)
               }
             });
           } else {
-            this.setError(error)
+            console.log(error)
           }
         });
       } catch (error) {
-        this.setError(error)
+        console.log(error)
       }
     } else {
       this.setError('Connection problems.');
@@ -122,7 +158,7 @@ class App extends Component {
               closeClaimConfirmation={this.closeClaimConfirmation}
               claimConfirmation={this.state.claimConfirmation}
             />
-            <ProgressBar progress={22} />
+            <ProgressBar progress={((this.state.daysLeft * 100) / this.state.roundInterval).toFixed(0)} />
             {this.state.error ? (
               <div className="App-error">
                 <span  className="App-error-text">
