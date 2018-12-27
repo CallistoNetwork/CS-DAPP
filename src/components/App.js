@@ -19,7 +19,7 @@ class App extends Component {
     onStaking: 0,
     reward: 0,
     roundInterval: 27,
-    daysLeft: 0,
+    daysPassed: 0,
   }
 
   componentDidMount() {
@@ -81,7 +81,7 @@ class App extends Component {
               if (!error) {
                 _this.setState({
                   onStaking: window.web3.fromWei(staker[0]),
-                  daysLeft: _this.daysPassed(new Date(staker[1].toNumber() * 1000)),
+                  daysPassed: _this.daysPassed(new Date(staker[1].toNumber() * 1000)),
                 });
               } else {
                 console.log(error)
@@ -157,8 +157,10 @@ class App extends Component {
               openClaimConfirmation={this.openClaimConfirmation}
               closeClaimConfirmation={this.closeClaimConfirmation}
               claimConfirmation={this.state.claimConfirmation}
+              daysPassed={this.state.daysPassed}
+              roundInterval={this.state.roundInterval}
             />
-            <ProgressBar progress={((this.state.daysLeft * 100) / this.state.roundInterval).toFixed(0)} />
+            <ProgressBar progress={((this.state.daysPassed * 100) / this.state.roundInterval).toFixed(0)} />
             {this.state.error ? (
               <div className="App-error">
                 <span  className="App-error-text">

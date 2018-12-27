@@ -21,6 +21,11 @@
   .App-address {
     text-align: center;
     word-break: break-all;
+    margin-top: 1rem;
+    font-size: 14px;
+    @media all and (min-width: 768px) {
+      font-size: 16px;
+    }
   }
   .App-container {
     .App-container-logos {
@@ -94,6 +99,9 @@
   }
   .App-stakeForm-subtitle {
     color: #868d95;
+    &.warning {
+      color: red;
+    }
   }
   .App-stakeForm-input {
     width: 100%;

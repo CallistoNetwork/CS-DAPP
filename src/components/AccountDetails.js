@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PopPop from 'react-poppop';
+import abi from '../utils/csAbi';
 
 class AccountDetails extends Component {
 
@@ -15,6 +16,7 @@ class AccountDetails extends Component {
   submitStakeForm = event => {
     event.preventDefault();
     this.setState({ stakeConfirmation: true });
+    this.startStaking(event.target[0].value);
   }
 
   handleWithdraw = event => {
@@ -25,6 +27,107 @@ class AccountDetails extends Component {
   handleClaim = event => {
     event.preventDefault();
     this.props.openClaimConfirmation();
+  }
+
+  startStaking = async (amount) => {
+    if (window.ethereum) {
+      window.web3 = new window.Web3(window.ethereum);
+      try {
+        await window.ethereum.enable();
+        const csContract = await window.web3.eth.contract(abi).at('0xd813419749b3c2cDc94A2F9Cfcf154113264a9d6');
+        const $this = this;
+        window.web3.eth.getAccounts((error, accounts, _this = $this, _amount = amount) => {
+          $this.setState({ address: accounts[0] });
+          if (!error) {
+            csContract.start_staking({
+              from: accounts[0],
+              gas: 200000,
+              value: window.web3.toWei(_amount),
+            }, (error, payback) => {
+              if (!error) {
+                _this.setState({
+                  stakeConfirmation: false,
+                }, () => window.location.reload())
+              } else {
+                console.log(error)
+              }
+            });
+          } else {
+            console.log(error)
+          }
+        });
+      } catch (error) {
+        console.log(error)
+      }
+    } else {
+      this.setError('Connection problems.');
+    }
+  }
+
+  witdrawStake = async () => {
+    if (window.ethereum) {
+      window.web3 = new window.Web3(window.ethereum);
+      try {
+        await window.ethereum.enable();
+        const csContract = await window.web3.eth.contract(abi).at('0xd813419749b3c2cDc94A2F9Cfcf154113264a9d6');
+        const $this = this;
+        window.web3.eth.getAccounts((error, accounts, _this = $this) => {
+          $this.setState({ address: accounts[0] });
+          if (!error) {
+            csContract.withdraw_stake({
+              gas: 200000,
+            }, (error, payback) => {
+              if (!error) {
+                _this.setState({
+                  stakeConfirmation: false,
+                }, () => window.location.reload())
+              } else {
+                console.log(error)
+              }
+            });
+          } else {
+            console.log(error)
+          }
+        });
+      } catch (error) {
+        console.log(error)
+      }
+    } else {
+      this.setError('Connection problems.');
+    }
+  }
+
+  clailReward = async () => {
+    if (window.ethereum) {
+      window.web3 = new window.Web3(window.ethereum);
+      try {
+        await window.ethereum.enable();
+        const csContract = await window.web3.eth.contract(abi).at('0xd813419749b3c2cDc94A2F9Cfcf154113264a9d6');
+        const $this = this;
+        window.web3.eth.getAccounts((error, accounts, _this = $this) => {
+          $this.setState({ address: accounts[0] });
+          if (!error) {
+            csContract.claim({
+              gas: 200000,
+            }, (error, payback) => {
+              if (!error) {
+                _this.setState({
+                  stakeConfirmation: false,
+                }, () => window.location.reload())
+              } else {
+                console.log(error)
+              }
+            });
+          } else {
+            console.log(error)
+          }
+        });
+      } catch (error) {
+        console.log(error)
+      }
+    } else {
+      this.setError('Connection problems.');
+    }
   }
 
   render() {
@@ -62,11 +165,16 @@ class AccountDetails extends Component {
         >
           <form className="App-stakeForm" onSubmit={this.submitStakeForm}>
             <h3 className="App-stakeForm-title">How much will your stake be?</h3>
+            <p className="App-stakeForm-subtitle warning">
+              You already have funds in staking contract. You will lose your staking 
+              reward if you make a new deposit into the contract. You should withdraw 
+              your staking reward first or use a another account for a new staking deposit.
+            </p>
             <p className="App-stakeForm-subtitle">
               Your funds will be locked for 27 days and you will be unable to withdraw within the locking period
             </p>
-            <input className="App-stakeForm-input" type='number' min={0} placeholder='Amount to stake' required />
-            {!this.state.stakeConfirmation ? (
+            <input className="App-stakeForm-input" name="amountToStake" type='number' min={0} placeholder='Amount to stake' required />
+            {this.state.stakeConfirmation ? (
               <input
                 className="App-stakeForm-submit btn-green"
                 value="Stake now!"
@@ -117,6 +225,9 @@ class AccountDetails extends Component {
               <a
                 className="App-stakeForm-submit btn-green"
                 href="#confirmWithdraw"
+                onClick={() => {
+                  this.witdrawStake();
+                }}
               > Yes, i'm sure </a>
               <a
                 className="App-stakeForm-submit btn-green"
@@ -152,6 +263,9 @@ class AccountDetails extends Component {
               <a
                 className="App-stakeForm-submit btn-green"
                 href="#confirmClaim"
+                onClick={() => {
+                  this.clailReward();
+                }}
               > Yes, i'm sure </a>
               <a
                 className="App-stakeForm-submit btn-green"

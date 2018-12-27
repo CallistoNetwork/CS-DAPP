@@ -18,7 +18,12 @@
       color: red; }
   .App .App-address {
     text-align: center;
-    word-break: break-all; }
+    word-break: break-all;
+    margin-top: 1rem;
+    font-size: 14px; }
+    @media all and (min-width: 768px) {
+      .App .App-address {
+        font-size: 16px; } }
   .App .App-container .App-container-logos {
     display: flex;
     justify-content: space-around; }
@@ -80,6 +85,8 @@
 
 .App-stakeForm .App-stakeForm-subtitle {
   color: #868d95; }
+  .App-stakeForm .App-stakeForm-subtitle.warning {
+    color: red; }
 
 .App-stakeForm .App-stakeForm-input {
   width: 100%;
