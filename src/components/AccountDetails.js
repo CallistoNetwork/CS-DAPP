@@ -165,11 +165,13 @@ class AccountDetails extends Component {
         >
           <form className="App-stakeForm" onSubmit={this.submitStakeForm}>
             <h3 className="App-stakeForm-title">How much will your stake be?</h3>
-            <p className="App-stakeForm-subtitle warning">
-              You already have funds in staking contract. You will lose your staking 
-              reward if you make a new deposit into the contract. You should withdraw 
-              your staking reward first or use a another account for a new staking deposit.
-            </p>
+            {staked > 0 ? (
+              <p className="App-stakeForm-subtitle warning">
+                You already have funds in staking contract. You will lose your staking 
+                reward if you make a new deposit into the contract. You should withdraw 
+                your staking reward first or use a another account for a new staking deposit.
+              </p>
+            ) : null}
             <p className="App-stakeForm-subtitle">
               Your funds will be locked for 27 days and you will be unable to withdraw within the locking period
             </p>
