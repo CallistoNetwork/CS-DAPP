@@ -16,6 +16,8 @@
     justify-items: center; }
     .App .App-error .App-error-text {
       color: red; }
+    .App .App-error .App-orange-text {
+      color: #ff876c; }
   .App .App-address {
     text-align: center;
     word-break: break-all;

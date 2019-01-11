@@ -7,6 +7,8 @@ import abi from '../utils/csAbi';
 
 import '../styles/App.css';
 
+let connectionInterval;
+
 class App extends Component {
   
   state = {
@@ -20,10 +22,22 @@ class App extends Component {
     reward: 0,
     roundInterval: 27,
     daysPassed: 0,
+    conectionError: 0,
+    NodeConnected: false,
   }
 
   componentDidMount() {
-    this.connectNode();
+    connectionInterval = setInterval(this.connectNode, 2000);
+    this.setError('Connecting to Callisto network');
+  }
+
+  componentDidUpdate() {
+    if (this.state.NodeConnected) {
+      clearInterval(connectionInterval);
+    } else if (this.state.conectionError > 5 && this.state.error === 'Connecting to Callisto network') {
+      clearInterval(connectionInterval);
+      this.setError('Error conecting callisto network');
+    }
   }
 
   openStakeConfirmation = () => {
@@ -68,6 +82,8 @@ class App extends Component {
         window.web3.eth.getAccounts((error, accounts, _this = $this) => {
           $this.setState({ address: accounts[0] });
           if (!error) {
+            clearInterval(connectionInterval);
+            _this.setError('');
             csContract.round_interval((error, roundInterval) => {
               if (!error) {
                 _this.setState({
@@ -113,7 +129,7 @@ class App extends Component {
         console.log(error)
       }
     } else {
-      this.setError('Connection problems.');
+      this.setState({ conectionError: this.state.conectionError + 1 })
     }
   }
 
@@ -163,9 +179,17 @@ class App extends Component {
             <ProgressBar progress={this.state.roundInterval === 0 ? 0 : ((this.state.daysPassed * 100) / this.state.roundInterval).toFixed(0)} />
             {this.state.error ? (
               <div className="App-error">
-                <span  className="App-error-text">
-                  {this.state.error}
-                </span>
+                {this.state.error === 'Connecting to Callisto network' ?
+                  (
+                    <span className="App-orange-text">
+                      {this.state.error}
+                    </span>
+                  ) : (
+                    <span className="App-error-text">
+                      {this.state.error}
+                    </span>
+                  )
+                }
               </div>
             ) : null}
           </div>
