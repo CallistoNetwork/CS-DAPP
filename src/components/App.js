@@ -34,7 +34,7 @@ class App extends Component {
   componentDidUpdate() {
     if (this.state.NodeConnected) {
       clearInterval(connectionInterval);
-    } else if (this.state.conectionError > 5 && this.state.error === 'Connecting to Callisto network') {
+    } else if (this.state.conectionError > 5 && this.state.error === 'Connecting to Callisto network ') {
       clearInterval(connectionInterval);
       this.setError('Error conecting callisto network');
     }
