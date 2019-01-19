@@ -34,7 +34,7 @@ class App extends Component {
   componentDidUpdate() {
     if (this.state.NodeConnected) {
       clearInterval(connectionInterval);
-    } else if (this.state.conectionError > 5 && this.state.error === 'Connecting to Callisto network ') {
+    } else if (this.state.conectionError > 5 && this.state.error === 'Connecting to Callisto network') {
       clearInterval(connectionInterval);
       this.setError('Error conecting callisto network');
     }
@@ -73,10 +73,18 @@ class App extends Component {
   setError = value => this.setState({ error: value });
 
   connectNode = async () => {
-    if (window.ethereum) {
-      window.web3 = new window.Web3(window.ethereum);
+    if (window.ethereum || window.Trust) {
+      if (window.ethereum) {
+        window.web3 = new window.Web3(window.ethereum);
+      } else if (window.Trust){
+        window.web3 = new window.Web3(window.Trust);
+      }
       try {
-        await window.ethereum.enable();
+        if (window.ethereum) {
+          await window.ethereum.enable();
+        } else if (window.Trust){
+          await window.Trust.enable();
+        }
         const csContract = await window.web3.eth.contract(abi).at('0xd813419749b3c2cDc94A2F9Cfcf154113264a9d6');
         const $this = this;
         window.web3.eth.getAccounts((error, accounts, _this = $this) => {
