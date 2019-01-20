@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import 'core-js/fn/array/find';
+import 'core-js/fn/array/includes';
+import 'core-js/fn/number/is-nan';
 import AccountDetails from './AccountDetails';
 import ProgressBar from './ProgressBar';
 import logo from '../images/single-logo.svg';
