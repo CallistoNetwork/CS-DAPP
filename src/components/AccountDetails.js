@@ -30,19 +30,26 @@ class AccountDetails extends Component {
   }
 
   startStaking = async (amount) => {
-    if (window.ethereum) {
-      window.web3 = new window.Web3(window.ethereum);
+    let web3 = window.web3;
+    if (window.ethereum || web3.currentProvider) {
+      if (window.ethereum) {
+        web3 = new window.Web3(window.ethereum);
+      } else {
+        web3 = new window.Web3(web3.currentProvider);
+      }
       try {
-        await window.ethereum.enable();
-        const csContract = await window.web3.eth.contract(abi).at('0xd813419749b3c2cDc94A2F9Cfcf154113264a9d6');
+        if (window.ethereum) {
+          await window.ethereum.enable();
+        }
+        const csContract = await web3.eth.contract(abi).at('0xd813419749b3c2cDc94A2F9Cfcf154113264a9d6');
         const $this = this;
-        window.web3.eth.getAccounts((error, accounts, _this = $this, _amount = amount) => {
+        web3.eth.getAccounts((error, accounts, _this = $this, _amount = amount) => {
           $this.setState({ address: accounts[0] });
           if (!error) {
             csContract.start_staking({
               from: accounts[0],
               gas: 200000,
-              value: window.web3.toWei(_amount),
+              value: web3.toWei(_amount),
             }, (error, payback) => {
               if (!error) {
                 _this.setState({
@@ -65,13 +72,20 @@ class AccountDetails extends Component {
   }
 
   witdrawStake = async () => {
-    if (window.ethereum) {
-      window.web3 = new window.Web3(window.ethereum);
+    let web3 = window.web3;
+    if (window.ethereum || web3.currentProvider) {
+      if (window.ethereum) {
+        web3 = new window.Web3(window.ethereum);
+      } else {
+        web3 = new window.Web3(web3.currentProvider);
+      }
       try {
-        await window.ethereum.enable();
-        const csContract = await window.web3.eth.contract(abi).at('0xd813419749b3c2cDc94A2F9Cfcf154113264a9d6');
+        if (window.ethereum) {
+          await window.ethereum.enable();
+        }
+        const csContract = await web3.eth.contract(abi).at('0xd813419749b3c2cDc94A2F9Cfcf154113264a9d6');
         const $this = this;
-        window.web3.eth.getAccounts((error, accounts, _this = $this) => {
+        web3.eth.getAccounts((error, accounts, _this = $this) => {
           $this.setState({ address: accounts[0] });
           if (!error) {
             csContract.withdraw_stake({
@@ -98,13 +112,20 @@ class AccountDetails extends Component {
   }
 
   clailReward = async () => {
-    if (window.ethereum) {
-      window.web3 = new window.Web3(window.ethereum);
+    let web3 = window.web3;
+    if (window.ethereum || web3.currentProvider) {
+      if (window.ethereum) {
+        web3 = new window.Web3(window.ethereum);
+      } else {
+        web3 = new window.Web3(web3.currentProvider);
+      }
       try {
-        await window.ethereum.enable();
-        const csContract = await window.web3.eth.contract(abi).at('0xd813419749b3c2cDc94A2F9Cfcf154113264a9d6');
+        if (window.ethereum) {
+          await window.ethereum.enable();
+        }
+        const csContract = await web3.eth.contract(abi).at('0xd813419749b3c2cDc94A2F9Cfcf154113264a9d6');
         const $this = this;
-        window.web3.eth.getAccounts((error, accounts, _this = $this) => {
+        web3.eth.getAccounts((error, accounts, _this = $this) => {
           $this.setState({ address: accounts[0] });
           if (!error) {
             csContract.claim({
