@@ -7,7 +7,6 @@ import ProgressBar from './ProgressBar';
 import logo from '../images/single-logo.svg';
 import trustLogo from '../images/trustLogo.png';
 import abi from '../utils/csAbi';
-
 import '../styles/App.css';
 
 let connectionInterval;
@@ -30,7 +29,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    connectionInterval = setInterval(this.connectNode, 2000);
+    connectionInterval = setInterval(this.connectNode, 1000);
     this.setError('Connecting to Callisto network');
   }
 
@@ -76,21 +75,20 @@ class App extends Component {
   setError = value => this.setState({ error: value });
 
   connectNode = async () => {
-    if (window.ethereum || window.Trust) {
+    let web3 = window.web3;
+    if (window.ethereum || web3.currentProvider) {
       if (window.ethereum) {
-        window.web3 = new window.Web3(window.ethereum);
-      } else if (window.Trust){
-        window.web3 = new window.Web3(window.Trust);
+        web3 = new window.Web3(window.ethereum);
+      } else {
+        web3 = new window.Web3(web3.currentProvider);
       }
       try {
         if (window.ethereum) {
           await window.ethereum.enable();
-        } else if (window.Trust){
-          await window.Trust.enable();
         }
-        const csContract = await window.web3.eth.contract(abi).at('0xd813419749b3c2cDc94A2F9Cfcf154113264a9d6');
+        const csContract = await web3.eth.contract(abi).at('0xd813419749b3c2cDc94A2F9Cfcf154113264a9d6');
         const $this = this;
-        window.web3.eth.getAccounts((error, accounts, _this = $this) => {
+        web3.eth.getAccounts((error, accounts, _this = $this) => {
           $this.setState({ address: accounts[0] });
           if (!error) {
             clearInterval(connectionInterval);
@@ -107,7 +105,7 @@ class App extends Component {
             csContract.staker(accounts[0], (error, staker) => {
               if (!error) {
                 _this.setState({
-                  onStaking: window.web3.fromWei(staker[0]),
+                  onStaking: web3.fromWei(staker[0]),
                   daysPassed: _this.daysPassed(new Date(staker[1].toNumber() * 1000)),
                 });
               } else {
@@ -117,16 +115,16 @@ class App extends Component {
             csContract.stake_reward(accounts[0], (error, reward) => {
               if (!error) {
                 _this.setState({
-                  reward: window.web3.fromWei(reward).toFixed(3),
+                  reward: web3.fromWei(reward).toFixed(3),
                 })
               } else {
                 console.log(error)
               }
             });
-            window.web3.eth.getBalance(accounts[0], (error, balance, __this = _this) => {
+            web3.eth.getBalance(accounts[0], (error, balance, __this = _this) => {
               if (!error && balance) {
                 __this.setState({
-                  balance: window.web3.fromWei(balance).toFixed(3),
+                  balance: web3.fromWei(balance).toFixed(3),
                 });
               } else {
                 console.log(error)
