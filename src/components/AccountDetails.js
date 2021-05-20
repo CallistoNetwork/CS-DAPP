@@ -166,9 +166,9 @@ class AccountDetails extends Component {
           <span className="App-content-head-title">{reward.toLocaleString()} CLO</span>
         </div>
         <div className="App-content-btns">
-          <div><a className="btn-green" href="#stake" onClick={this.handleStake}>Start Staking</a></div>
+          {/*<div><a className="btn-green" href="#stake" onClick={this.handleStake}>Start Staking</a></div>*/}
           <div><a className="btn-green" href="#withdraw" onClick={this.handleWithdraw}>Withdraw</a></div>
-          <div><a className="btn-green" href="#claim" onClick={this.handleClaim}>Claim Reward</a></div>
+          {/*<div><a className="btn-green" href="#claim" onClick={this.handleClaim}>Claim Reward</a></div>*/}
         </div>
         <PopPop
           open={this.props.stakeConfirmation}
